@@ -15,13 +15,20 @@ public class Block extends GameEntity {
     // Basics
     private final int type;
     
-    public Block(int type, int x, int y) {
+    // Gameplay
+    private final Marianito marianito;
+    
+    public Block(int type, int x, int y, Marianito marianito) {
         this.x = x; this.y = y;
         this.w = type == 3 ? 120 : 60; this.h = type == 3 ? 141 : 60;
         this.type = type;
+        this.marianito = marianito;
         
-        texture = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/block-" + type + ".png");
+        texture = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/block-" + type + ".png");
     }
+    
+    // Getters and Setter
+    public int getType() { return type; }
 
     @Override
     public void update() {
@@ -30,6 +37,6 @@ public class Block extends GameEntity {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(texture, x, y, null);
+        g.drawImage(texture, x - marianito.getX() / 2, y, null);
     }
 }

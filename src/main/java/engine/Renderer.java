@@ -5,6 +5,8 @@
 package engine;
 
 import entities.GameEntity;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -26,7 +28,7 @@ public final class Renderer {
     public Renderer(GameEntity[] entities) {
         this.entities = entities;
         
-        background = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/mundo.png");
+        background = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/background.png");
     }
     
     public static Renderer getInstance(GameEntity[] entities) {
@@ -45,9 +47,14 @@ public final class Renderer {
     }
     
     private void drawBackground(Graphics g) {
-        g.drawImage(background, 0, 0, null);
+        g.drawImage(background, 1024 - entities[entities.length - 1].getX() / 2, 0, null);
+        g.drawImage(background, - entities[entities.length - 1].getX() / 2, 0, null);
+        g.drawImage(background, -1024 - entities[entities.length - 1].getX() / 2, 0, null);
     }
     
     private void drawUI(Graphics g) {
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("Monospaced", Font.BOLD, 18));
+        g.drawString("MARIANITO", 10, 20);
     }
 }

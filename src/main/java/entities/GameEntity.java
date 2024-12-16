@@ -15,6 +15,12 @@ public abstract class GameEntity {
     protected int x, y, w, h;
     protected Image texture;
     
+    // Getters and Setters
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public int getW() { return w; }
+    public int getH() { return h; }
+    
     public abstract void update();
     public abstract void render(Graphics g);
 }

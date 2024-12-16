@@ -4,6 +4,7 @@
  */
 package entities;
 
+import engine.AudioController;
 import engine.InputHandler;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -24,10 +25,14 @@ public class Marianito extends GameEntity {
     // Basics
     private int velX, velY;
     
-    // Gameplay
+    // Functionality
     private boolean jumping;
+    
+    // Gameplay
     private final InputHandler inputHandler;
     private int runAnimationStep;
+    
+    private static AudioController audioController;
     
     // UI
     private final Image[] sprites;
@@ -43,18 +48,20 @@ public class Marianito extends GameEntity {
         sprites = new Image[8];
         spriteIdx = 1;
         initSprites();
+        
+        audioController = AudioController.getInstance();
     }
     
     private void initSprites() {
         //        + 4 if its to the right
-        sprites[0] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/standing-left.png"); // Standing Left
-        sprites[0 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/standing-right.png"); // Standing Right
-        sprites[1] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/jumping-left.png"); // Jumping Left
-        sprites[1 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/jumping-right.png"); // Jumping Right
-        sprites[2] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/running-left-0.png"); // Running Left 0
-        sprites[3] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/running-left-1.png"); // Running Left 1
-        sprites[2 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/running-right-0.png"); // Running Right 0
-        sprites[3 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/running-right-1.png"); // Running Right 1
+        sprites[0] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/standing-left.png"); // Standing Left
+        sprites[0 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/standing-right.png"); // Standing Right
+        sprites[1] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/jumping-left.png"); // Jumping Left
+        sprites[1 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/jumping-right.png"); // Jumping Right
+        sprites[2] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/running-left-0.png"); // Running Left 0
+        sprites[3] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/running-left-1.png"); // Running Left 1
+        sprites[2 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/running-right-0.png"); // Running Right 0
+        sprites[3 + 4] = Toolkit.getDefaultToolkit().getImage("src/main/java/resources/images/running-right-1.png"); // Running Right 1
         
         // Extras
         runAnimationStep = 0;
@@ -63,6 +70,7 @@ public class Marianito extends GameEntity {
     private void jump() {
         if (jumping) return;
         
+        audioController.play("jump");
         jumping = true;
         velY = -JUMP_STRENGTH;
     }
@@ -89,6 +97,7 @@ public class Marianito extends GameEntity {
         }
     }
     
+    @Override
     public void update() {
         handleJumping();
         handleMovement();
@@ -107,6 +116,6 @@ public class Marianito extends GameEntity {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(sprites[spriteIdx], x, y, null);
+        g.drawImage(sprites[spriteIdx], x - x / 2, y, null);
     }
 }

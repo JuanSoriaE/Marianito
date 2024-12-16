@@ -28,12 +28,15 @@ public class Game implements Runnable {
     
     // Entities
     private final Marianito marianito;
-    private GameEntity[] blocks;
+    private Block[] blocks;
     
     // Functionality
     private final GamePanel gamePanel;
     
     private boolean running;
+    
+    // Gameplay
+    private static AudioController audioController;
     
     public Game() {
         marianito = new Marianito();
@@ -43,10 +46,19 @@ public class Game implements Runnable {
         entities[entities.length - 1] = marianito;
         System.arraycopy(blocks, 0, entities, 0, blocks.length);
         gamePanel = new GamePanel(W, H, entities);
+        
+        initAudios();
     }
     
     // Getters and Setters
     public GamePanel getGamePanel() { return gamePanel; }
+    
+    private void initAudios() {
+        audioController = AudioController.getInstance();
+        
+        audioController.load("background-music", "src/main/java/resources/audios/background-music.wav");
+        audioController.load("jump", "src/main/java/resources/audios/jump.wav");
+    }
     
     private void loadLevel(int level) {
         try {
@@ -54,12 +66,12 @@ public class Game implements Runnable {
                 new String(Files.readAllBytes(Paths.get("src/main/java/resources/levels/level-" + level + ".json"))));
             
             JSONArray blocksConfig = config.getJSONArray("blocks");
-            blocks = new GameEntity[blocksConfig.length()];
+            blocks = new Block[blocksConfig.length()];
             for (int i = 0; i < blocksConfig.length(); i++) {
                 JSONObject blockConfig = blocksConfig.getJSONObject(i);
                 
                 blocks[i] = new Block(
-                    blockConfig.getInt("type"), blockConfig.getInt("x"), blockConfig.getInt("y"));
+                    blockConfig.getInt("type"), blockConfig.getInt("x"), blockConfig.getInt("y"), marianito);
             }
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
@@ -70,6 +82,7 @@ public class Game implements Runnable {
         if (running) return;
         
         running = true;
+        audioController.playLoop("background-music");
         Thread thread = new Thread(this);
         thread.start();
     }
